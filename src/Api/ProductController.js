@@ -7,3 +7,11 @@ export function getProduct (){
 export function searchProduct(keyword){
     return axios.get(`http://localhost:8080/products/search?keyword=${keyword}`)
 }
+
+export function getCategory(){
+    return axios.get('http://localhost:8080/api/category')
+}
+
+export function getBookByCategory(categoryid){
+    return axios.get(`http://localhost:8080/api/book/category/${categoryid}`)
+}
