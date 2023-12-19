@@ -74,7 +74,7 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (cart.totalItem) {
-      navigate(`/checkout/${user.id}/${cart.id}`);
+      navigate(`/checkout/${user.id}/${cart.id}`,{state : {returnBook: false}});
     } else {
       setErrorModal(true);
       contentModal = "Cart is empty! Please go buy something!";

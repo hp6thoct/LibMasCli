@@ -48,7 +48,7 @@ const Order = () => {
           renderItem={(order) => (
             <List.Item style={{ padding: "16px" }}>
               <List.Item.Meta
-                title={`Order Date: ${formatDate(order.orderDate)}`}
+                title={`Order Date: ${formatDate(order.borrowDate)}`}
                 description={`Total: $${order.totalAmount.toFixed(2)}`}
               />
               <Space>

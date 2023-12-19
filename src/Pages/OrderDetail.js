@@ -9,7 +9,7 @@ const { Text } = Typography;
 const OrderDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {user} = useUser();
+  const { user } = useUser();
 
   const order = location.state.order;
 
@@ -19,7 +19,9 @@ const OrderDetail = () => {
 
   const handleReturnButtonClick = () => {
     // Navigate to the return book page
-    navigate(`/checkout/${user.id}/${order.id}`, { state: { borrow: order, returnBook : true } });
+    navigate(`/checkout/${user.id}/${order.id}`, {
+      state: { borrow: order, returnBook: true },
+    });
   };
 
   return (
@@ -33,6 +35,9 @@ const OrderDetail = () => {
       </div>
       <div style={{ marginTop: "16px" }}>
         <Text strong>Due: {formatDate(order.due)}</Text>
+      </div>
+      <div style={{ marginTop: "16px" }}>
+        <Text strong>Status: {order.status} </Text>
       </div>
       <div style={{ marginTop: "16px" }}>
         <Text strong>Cart Items:</Text>
@@ -56,8 +61,13 @@ const OrderDetail = () => {
         <Text strong>Total: ${order.totalAmount.toFixed(2)}</Text>
       </div>
       <Space>
-        <Button style={{ marginTop: "16px" }} type="primary" onClick={handleReturnButtonClick}>
-          Return Books
+        <Button
+          style={{ marginTop: "16px" }}
+          type="primary"
+          onClick={handleReturnButtonClick}
+          disabled={order.status !== "borrow"}
+        >
+          {order.status === "return" ? "Returned" : "Return"}
         </Button>
       </Space>
     </div>

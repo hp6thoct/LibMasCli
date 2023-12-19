@@ -34,7 +34,7 @@ function Login() {
 
     try {
       const userData = (await login(username, password)).data;
-      if (userData.role === "Customer") {
+      if (userData.role === "Reader") {
         loginUser(userData);
         await getUserCart(userData.id);
         navigate("/");

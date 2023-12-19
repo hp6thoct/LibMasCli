@@ -107,7 +107,7 @@ const Checkout = () => {
         reader: user,
         shipping: shippingData,
         payment: paymentData,
-        borrow_day: 7,
+        borrowDay: 7,
         total_amount: paymentData.amount,
       };
       const res = await confirmOrder(data);
@@ -129,6 +129,7 @@ const Checkout = () => {
       fine: fine,
       reader: user,
     };
+    console.log(data)
     const res = await confirmReturn(data);
     if (res.status === 200 && res.data) {
       setShippingData();
