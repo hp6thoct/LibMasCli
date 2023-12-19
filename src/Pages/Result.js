@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Button, Spin, Result as AntResult } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { searchProduct } from "../Api/ProductController";
 import ResultModal from "../Components/ResultModal";
 import { useUser } from "../Context/UserContext";
@@ -10,14 +10,14 @@ const { Meta } = Card;
 
 const Result = () => {
   const location = useLocation();
-  const keyword = location.state.keyword
+  const { keyword } = useParams();
   const [searchResults, setSearchResults] = useState([]);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [guestModal, setGuestModal] = useState(false);
   const { user, cart, saveCart } = useUser();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     searchProduct(keyword)
@@ -30,31 +30,31 @@ const Result = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [keyword]);
 
   // Function to handle adding a product to the cart
   const handleAddToCart = async (index) => {
     if (!user) {
-        setGuestModal(true);
+      setGuestModal(true);
+    } else {
+      const item = {
+        product: searchResults[index],
+        quantity: 1,
+        amount: 0,
+      };
+      console.log(item);
+      const res = await addToCart(cart.id, item);
+      console.log(res);
+      if (res.status === 200 && res.data.totalItem !== 0) {
+        saveCart(res.data);
+        setSuccessModalVisible(true);
+        setIsSuccess(true);
       } else {
-        const item = {
-          product: searchResults[index],
-          quantity: 1,
-          amount: 0,
-        };
-        console.log(item);
-        const res = await addToCart(cart.id, item);
-        console.log(res);
-        if (res.status === 200 && res.data.totalItem !== 0) {
-          saveCart(res.data);
-          setSuccessModalVisible(true);
-          setIsSuccess(true);
-        } else {
-          console.log("Failed to add to cart. Non-200 status code:", res.status);
-          setSuccessModalVisible(true);
-          setIsSuccess(false);
-        }
+        console.log("Failed to add to cart. Non-200 status code:", res.status);
+        setSuccessModalVisible(true);
+        setIsSuccess(false);
       }
+    }
   };
 
   const handleGuestOk = () => {
@@ -62,13 +62,18 @@ const Result = () => {
     navigate("/login");
   };
 
-
   if (loading) {
     return <Spin tip="Loading..." />;
   }
 
   if (searchResults.length === 0) {
-    return <AntResult status="warning" title="No Results" subTitle={`No products found for "${keyword}"`} />;
+    return (
+      <AntResult
+        status="warning"
+        title="No Results"
+        subTitle={`No products found for "${keyword}"`}
+      />
+    );
   }
 
   return (
