@@ -5,7 +5,7 @@ export function getProduct (){
 }
 
 export function searchProduct(keyword){
-    return axios.get(`http://localhost:8080/products/search?keyword=${keyword}`)
+    return axios.get(`http://localhost:8080/api/book/search?keyword=${keyword}`)
 }
 
 export function getCategory(){
